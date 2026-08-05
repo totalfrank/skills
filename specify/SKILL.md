@@ -53,6 +53,18 @@ Use this template:
 ## After writing
 
 1. Print the file path. **Do not paste the file contents into chat** — the user will open it in their editor.
-2. List Open Questions (if any) inline in chat — these are the only thing the user needs to see immediately, since they block the `plan` phase.
-3. Say: "Spec written. Review it in your editor and tell me when you're ready to proceed to `plan` (or want to discuss changes)."
-4. **Stop. Do not run `plan` until the user explicitly says to proceed.** The user may edit `spec.md` directly — that's expected. If they ask you to change something, edit the file in place; don't rewrite from scratch.
+2. List Open Questions (if any) inline in chat, in one terse block.
+3. **Continue straight into `plan`. Do not stop for review here.** Spec, plan, and
+   tasks are written back-to-back in one pass; the single review gate is *after*
+   `tasks.md` exists. Say one line — "Spec written → `<path>`. Moving on to plan."
+   — and keep going.
+
+The only thing that pauses this phase is an Open Question that is genuinely
+**blocking** — one where two plausible answers produce materially different plans,
+so writing `plan.md` without it would mean guessing at the design. In that case ask
+via `AskUserQuestion` (not a free-form stop), get the answer, fold it into
+`spec.md`, and continue. Questions that only affect details the plan can defer stay
+listed as Open Questions and do not stop the pass.
+
+If the user later asks for changes, edit `spec.md` in place; don't rewrite from
+scratch. They may also edit it directly — re-read it before using it.

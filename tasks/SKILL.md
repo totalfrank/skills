@@ -72,7 +72,22 @@ Use this template:
 
 ## After writing
 
-1. Print the file path. **Do not paste the file contents into chat.**
-2. Inline in chat, give just: total task count, and (if any) a one-line note on plan gaps the breakdown surfaced.
-3. Say: "Tasks written. Review them in your editor and tell me when you're ready to proceed to `implement`."
-4. **Stop. Do not start `implement` until the user explicitly says to proceed.** If they ask for changes, edit `tasks.md` in place.
+This is **the review gate** — the one stop in the whole SDD pass. `spec.md`,
+`plan.md`, and `tasks.md` were written back-to-back without pausing, so the user is
+seeing all three for the first time here. Hand off accordingly:
+
+1. Print all three file paths — `spec.md`, `plan.md`, `tasks.md`. **Do not paste any
+   file's contents into chat.**
+2. Inline in chat, keep it to a few bullets total:
+   - total task count and group count;
+   - any Open Questions still live in `spec.md`;
+   - any decision you made on your own during the pass that the user might want to
+     overturn (a spec edit made while planning, a design fork you resolved, a plan
+     gap the breakdown surfaced).
+3. Say: "Spec, plan, and tasks are written. Review them in your editor and tell me
+   when you're ready to proceed to `implement`."
+4. **Stop. Do not start `implement` until the user explicitly says to proceed.**
+   Silence is not approval, and neither is a tangentially-related message.
+5. If they ask for changes, edit the file in place — and if a change to `spec.md` or
+   `plan.md` invalidates downstream artifacts, propagate it forward through
+   `plan.md` / `tasks.md` in the same pass, then stop again.
