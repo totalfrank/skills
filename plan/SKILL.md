@@ -147,5 +147,18 @@ def test_list_widgets_excludes_archived_by_default(): ...
 
 1. Print the file path. **Do not paste the file contents into chat.**
 2. Inline in chat, briefly note (1-3 bullets max): any non-obvious risks, surprising decisions, or spec gaps the plan surfaced.
-3. Say: "Plan written. Review it in your editor and tell me when you're ready to proceed to `tasks`."
-4. **Stop. Do not run `tasks` until the user explicitly says to proceed.** If they ask for changes, edit `plan.md` in place.
+3. **Continue straight into `tasks`. Do not stop for review here.** The review gate
+   comes after `tasks.md` is written, not between phases. Say one line — "Plan
+   written → `<path>`. Moving on to tasks." — and keep going.
+
+Two things pause this phase, both narrow:
+
+- The plan work reveals the **spec is wrong** (not merely thin) — a contradiction or
+  a missing requirement that changes what gets built. Fix `spec.md` in place, note
+  the edit in one line, and continue; only ask the user if the fix is a product
+  decision you can't make.
+- A design fork where the alternatives lead to **materially different task lists**
+  and the spec doesn't settle it. Ask with `AskUserQuestion`, record the answer in
+  *Alternatives Considered*, and continue.
+
+If the user later asks for changes, edit `plan.md` in place.
