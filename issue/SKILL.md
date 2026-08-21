@@ -110,7 +110,12 @@ Once the plan is approved:
    → `tasks` → `implement`). The finalized issue plan is your input to `plan` —
    don't re-litigate what's already agreed; translate it into spec/plan/tasks and
    execute.
-3. Commit, push, and open a **draft PR** that links the issue (`Fixes #<n>`).
+3. **The PR is `implement`'s finishing step — don't re-do it here.** That phase
+   pushes, ensures a PR exists (opened as a draft), and then **marks it ready for
+   review** once the spec's acceptance criteria hold. Your job at this point is to
+   check two things: the PR body links the issue (`Fixes #<n>`) — add it if
+   `implement` opened the PR without it — and the PR actually came out **ready,
+   not draft**. A draft PR here means acceptance criteria failed; say which ones.
 4. **Subscribe to the PR** with `subscribe_pr_activity` so review comments and CI
    results arrive as push notifications. Address them per the PR-activity rules
    until the PR is merged or closed.
@@ -153,6 +158,7 @@ PR thread.
 | Post issue comment | `mcp__github__add_issue_comment` |
 | History / blame / bisect | `git` via Bash; `mcp__github__list_commits`, `get_commit`, `search_commits` |
 | Open PR | `mcp__github__create_pull_request` (draft) |
+| Mark PR ready for review | `mcp__github__update_pull_request` (`draft: false`), or `gh pr ready <n>` |
 | Watch issue thread | `mcp__Claude_Code_Remote__send_later` (poll) |
 | Watch PR thread | `subscribe_pr_activity` (push) |
 | Implement | `sdd` skill (`specify` → `plan` → `tasks` → `implement`) |

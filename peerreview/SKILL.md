@@ -158,9 +158,11 @@ Do this once, before any waiting.
 
 6. **Mark ready for review — this opens round 1.** If the PR is a draft and the
    user asked for it to be ready, flip it with `mcp__github__update_pull_request`
-   (`draft: false`). Claude Code reviews on the ready-for-review transition, so this
-   is a real round opener, not just a state change — record it as round 1 against the
-   current `head.sha`. (When `implement` hands off to this skill, the PR was already
+   (`draft: false`), or `gh pr ready <number>` in a local session. Claude Code
+   reviews on the ready-for-review transition, so this is a real round opener, not
+   just a state change — record it as round 1 against the current `head.sha`, and
+   re-read the PR to confirm it is no longer a draft before you start waiting on a
+   round that a failed flip would never open. (When `implement` hands off to this skill, the PR was already
    flipped to ready as its last step — that flip *is* round 1; don't re-open it.)
 
    If the PR is *already* ready and you have pushed nothing, no round will fire on
@@ -435,7 +437,7 @@ found at round 3, and it justified another round exactly as it should.
 | Resolve a thread | `pull_request_review_write` (`resolve_thread`, `PRRT_...` id) |
 | Round comment — summary or explicit all-clear | `mcp__github__add_issue_comment` |
 | Check the review workflow actually ran | `mcp__github__actions_list` / `actions_get` |
-| Mark ready for review (opens round 1) | `mcp__github__update_pull_request` (`draft: false`) |
+| Mark ready for review (opens round 1) | `mcp__github__update_pull_request` (`draft: false`); `gh pr ready <n>` locally |
 | Ask for a steer | `AskUserQuestion` |
 
 Tool names are for the Claude Code on the web / remote environment. Load any that are

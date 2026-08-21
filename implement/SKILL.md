@@ -63,20 +63,36 @@ without waiting to be asked:
 
 1. **Push** the branch — `git push -u origin <branch>`, retrying on network
    errors with exponential backoff (2s, 4s, 8s, 16s).
-2. **Ensure a PR exists** for the branch. If there's no open PR, open one
-   (draft), filling in the repo's PR template if it has one.
-3. **Mark it ready for review immediately** — `mcp__github__update_pull_request`
-   with `draft: false`. This is part of finishing, not a separate request:
-   don't leave a completed implementation sitting in draft, and don't ask
-   permission to flip it.
-4. **Report once**, briefly: groups completed, acceptance criteria status, the
-   PR link, and the notes list you accumulated during the run.
-5. Hand off to the `peerreview` skill to drive the review rounds. Marking ready
+2. **Ensure a PR exists** for the branch. An already-open PR counts, draft or
+   not — don't open a second one. If there is none, open one (as a draft),
+   filling in the repo's PR template if it has one.
+3. **Mark it ready for review immediately.** Use whichever mechanism this
+   session actually has:
+   - `mcp__github__update_pull_request` with `draft: false` — Claude Code on
+     the web / remote. Load it via `ToolSearch` if it isn't already available.
+   - `gh pr ready <number>` via Bash — local sessions with the `gh` CLI.
+   - Neither available → say so explicitly in the final report and name the PR
+     that needs a manual flip. The step never disappears silently.
+
+   This is part of finishing, not a separate request: don't leave a completed
+   implementation sitting in draft, and don't ask permission to flip it. A
+   standing "open pull requests as drafts" convention — the web harness has
+   one — governs how a PR is *created*, not whether a finished implementation
+   stays draft. It does not override this step.
+4. **Confirm the flip landed.** Re-read the PR (`mcp__github__pull_request_read`
+   (`get`), or `gh pr view <number> --json isDraft`) and check that it is no
+   longer a draft. If it still is, retry once; if it still is after that, report
+   it as a blocker rather than assuming it worked.
+5. **Report once**, briefly: groups completed, acceptance criteria status, the
+   PR link, whether it is ready or draft, and the notes list you accumulated
+   during the run.
+6. Hand off to the `peerreview` skill to drive the review rounds. Marking ready
    for review is what opens round 1, so the handoff is immediate.
 
 If the acceptance criteria *don't* all hold, still push and open the PR, but say
 plainly which criteria fail and leave the PR in draft — ready-for-review means
-the implementation is actually complete.
+the implementation is actually complete. Failing acceptance criteria are the
+**only** reason this phase ends with a draft PR.
 
 ## Rules
 

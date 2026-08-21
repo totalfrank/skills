@@ -36,8 +36,10 @@ Each feature gets a subdirectory named `YYYY-MM-DD-kebab-case-name/`, where the 
    three paths, summarize in a few bullets (task/group count, live open questions,
    decisions you made unilaterally), and wait.
 6. Wait for the user to say "proceed" (or equivalent: "go", "next", "looks good"). Then
-   **run `implement`** → execute every group to completion, then mark the PR ready for
-   review.
+   **run `implement`** → execute every group to completion, then push, ensure a PR
+   exists, and **mark it ready for review**. That flip is part of `implement`'s
+   *Finishing* step, not something to wait for a separate request on; the only reason
+   the flow ends with a draft PR is a spec acceptance criterion that doesn't hold.
 
 ## Review model
 
