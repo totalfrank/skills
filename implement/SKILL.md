@@ -89,10 +89,11 @@ without waiting to be asked:
 6. Hand off to the `peerreview` skill to drive the review rounds. Marking ready
    for review is what opens round 1, so the handoff is immediate.
 
-If the acceptance criteria *don't* all hold, still push and open the PR, but say
-plainly which criteria fail and leave the PR in draft — ready-for-review means
-the implementation is actually complete. Failing acceptance criteria are the
-**only** reason this phase ends with a draft PR.
+If the acceptance criteria *don't* all hold, or a relevant local check (tests,
+lint, typecheck) fails, still push and open the PR, but say plainly which
+criterion or check fails and leave the PR in draft — ready-for-review means
+the implementation is actually complete. Those are the **only** reasons this
+phase ends with a draft PR.
 
 ## Rules
 
