@@ -12,8 +12,8 @@ every automated reviewer stops flagging new bugs and CI is green.
 are produced by automated reviewers: Claude Code (the Claude GitHub App / review
 workflow posting as a bot account, or a Claude Code review posting under the PR
 author's own GitHub account), and/or other review bots such as Codex. You are the
-*author side* of that conversation: you open rounds, triage what the reviewer finds, fix or
-dispute it, and push. Two Claude Code roles, one PR; keep them straight, because the
+*author side* of that conversation: you open rounds, triage what the reviewers find, fix or
+dispute it, and push. Several roles, one PR; keep them straight, because each
 reviewer's comments arrive as events exactly like a human's would, and your own
 comments come back too.
 
@@ -241,7 +241,12 @@ that reviewer's newest review and compare its `commit_id` to your recorded
 A round is complete only when **every** recorded reviewer has reported on the
 current `head.sha`. A reviewer that signals "no findings" with a reaction (Codex's
 👍) or a status comment (a "completed" summary) instead of a review has reported —
-that signal counts as its report. Until every reviewer is in, triage what has
+that signal counts as its report. If the completed status names no commit, it
+counts for `head.sha` when the same summary comment earlier showed that reviewer
+running on `head.sha`, or when it completed after the push that created
+`head.sha`. If a reviewer hasn't reported on `head.sha` after the others have and
+CI is done, use its re-review trigger once. If it doesn't run on pushes by design,
+note that in the ledger and the round comment, and don't wait on it. Until every reviewer is in, triage what has
 landed but hold the push and the round comment, so one push answers the whole round.
 
 **CI failed.** A red check is a gate just like a finding — pull the failing job's
@@ -262,7 +267,9 @@ push opens a new round, so update `head.sha` and return to Phase 1.
 **Your own comment came back.** Skip silently — your round summaries and replies
 return as events, but they are not requests. Your own echoes are what you posted
 this session; compare by comment/review id, not by author, because a reviewer may
-post under the same login you do.
+post under the same login you do. Replying to a review thread also creates a
+review under your login with an empty body; ignore empty-body reviews — they are
+a side effect of a reply, not a reviewer's report.
 
 **`head.sha` moved and you did not push it.** Someone else pushed. Re-sync your local
 branch before doing anything else, and treat any review against the old SHA as stale.
@@ -377,7 +384,8 @@ Check at the end of every round. You are **done** when all three hold:
 
 1. **Every** recorded reviewer has reported on `head.sha` — each one's newest
    review has `commit_id == head.sha`, or its "no findings" signal (a reaction or a
-   status comment) is for `head.sha` — and none of them raised **new findings in
+   status comment) is for `head.sha` — see Phase 2 for signals that name no
+   commit — and none of them raised **new findings in
    the Bug bucket**, where *new* is defined by the ledger check in Phase 3. One
    reviewer clean while another has not reported is not done.
 2. CI is green on `head.sha` (`get_status` or `get_check_runs`). Confirm this with a
@@ -436,7 +444,7 @@ redelivery.
 ```markdown
 # PR <owner>/<repo>#<num> — peer review loop
 Reviewers:
-- Claude Code as `totalfrank` — review body ends with the Claude Code footer — re-review: `@claude review`
+- Claude Code as `totalfrank` — review body ends with the Claude Code footer — re-review: push (check .github/workflows/ for a mention trigger)
 - Codex as `chatgpt-codex-connector[bot]` — inline findings, or 👍 / "Codex Review Summary" completed when clean — re-review: `@codex review`
 Round: 4   Head: a1b2c3d
 Round openers: push, ready-for-review
